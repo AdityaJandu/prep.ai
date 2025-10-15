@@ -1,0 +1,202 @@
+"use client";
+
+// NPM imports:
+import { email, z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { OctagonAlertIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+// Local imports:
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { authClient } from "@/lib/auth-client";
+import { Spinner } from "@/components/ui/spinner";
+
+
+
+// Form Schema:
+const formSchema = z.object({
+    name: z.string().min(1, { message: "Name is required" }),
+    email: z.string().email(),
+    password: z.string().min(1, { message: "Password is required" }),
+    cnfmPassword: z.string().min(1, { message: "Password is required" })
+}).refine(
+    (data) => data.password === data.cnfmPassword, {
+    message: "Passwords don't match. Please try again!",
+    path: ["cnfmPassword"],
+});
+
+
+export const SignUpView = () => {
+    const router = useRouter();
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            password: "",
+            cnfmPassword: "",
+        }
+    });
+
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        setError(null);
+        setLoading(true);
+
+        try {
+            await authClient.signUp.email(
+                {
+                    name: data.name,
+                    email: data.email,
+                    password: data.password,
+                },
+                {
+                    onSuccess: () => {
+                        router.push("/");
+                    },
+                    onError: ({ error }) => {
+                        setError(error.message);
+                    },
+                }
+            );
+        } catch (err: any) {
+            // Catch any unhandled promise rejections
+            console.error(err);
+            setError("Something went wrong. Please try again.");
+        } finally {
+            // Always stop loading no matter what
+            setLoading(false);
+        }
+    };
+
+
+    return (
+        <div className="flex flex-col p-6">
+            <Card className="overflow-hidden p-0">
+                <CardContent className="grid p-0 md:grid-cols-2">
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
+                            <div className="flex flex-col gap-6">
+                                <div className="flex flex-col items-center text-center">
+                                    <h1 className="text-2xl font-semibold">Let's get started</h1>
+                                    <p className="text-muted-foreground text-balance">Create a new account</p>
+                                </div>
+
+                                <div className="grid gap-3">
+                                    <FormField
+                                        control={form.control}
+                                        name="name"
+                                        render={({ field }) => {
+                                            return <FormItem>
+                                                <FormLabel>Name</FormLabel>
+                                                <Input
+                                                    type="name" placeholder="John Doe" {...field} />
+                                                <FormMessage />
+                                            </FormItem>;
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="grid gap-3">
+                                    <FormField
+                                        control={form.control}
+                                        name="email"
+                                        render={({ field }) => {
+                                            return <FormItem>
+                                                <FormLabel>Email</FormLabel>
+                                                <Input
+                                                    type="email" placeholder="iam@example.com" {...field} />
+                                                <FormMessage />
+                                            </FormItem>;
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="grid gap-3">
+                                    <FormField
+                                        control={form.control}
+                                        name="password"
+                                        render={({ field }) => {
+                                            return <FormItem>
+                                                <FormLabel>Password</FormLabel>
+                                                <Input
+                                                    type="password" placeholder="********" {...field} />
+                                                <FormMessage />
+                                            </FormItem>;
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="grid gap-3">
+                                    <FormField
+                                        control={form.control}
+                                        name="cnfmPassword"
+                                        render={({ field }) => {
+                                            return <FormItem>
+                                                <FormLabel>Confirm Password</FormLabel>
+                                                <Input
+                                                    type="cnfmPassword" placeholder="********" {...field} />
+                                                <FormMessage />
+                                            </FormItem>;
+                                        }}
+                                    />
+                                </div>
+
+                                {!!error &&
+                                    <Alert className="bg-destructive/30 ">
+                                        <OctagonAlertIcon className="w-4 h-4 !text-destructive" />
+                                        <AlertTitle >
+                                            {error}
+                                        </AlertTitle>
+                                    </Alert>
+                                }
+
+                                {loading && <Button disabled size="sm">
+                                    <Spinner />
+                                    Signing up...
+                                </Button>
+                                }
+
+                                {!loading && <Button type="submit" >
+                                    Sign up
+                                </Button>}
+
+                                <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                                    <span className="bg-card text-muted-foreground relative z-10 px-2">Or continue with</span>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <Button type="button" variant="outline" >Google</Button>
+                                    <Button type="button" variant="outline" >Github</Button>
+                                </div>
+
+                                <div className="text-center text-sm">
+                                    Already have an account <Link href="/sign-in" className="font-bold" >Log in</Link>
+                                </div>
+                            </div>
+                        </form>
+                    </Form>
+                    <div className="bg-radial from-pink-200 to-pink-400 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
+                        <img src="/logo.svg" alt="Logo" className="w-[92px] h-[92px] pt-4" />
+                        <p className="text-2xl font-semibold text-purple-800 pb-4">
+                            prep.ai
+                        </p>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4 mt-6">
+                By clicking continue, you agree our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            </div>
+        </div>
+    );
+};
