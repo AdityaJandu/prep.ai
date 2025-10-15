@@ -1,7 +1,7 @@
 "use client";
 
 // NPM imports:
-import { email, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OctagonAlertIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,7 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { authClient } from "@/lib/auth-client";
 import { Spinner } from "@/components/ui/spinner";
+import { FaGoogle, FaGithub } from "react-icons/fa";
 
 
 
@@ -49,11 +50,38 @@ export const SignInView = () => {
                 {
                     email: data.email,
                     password: data.password,
+                    callbackURL: "/",
                 },
                 {
                     onSuccess: () => {
                         router.push("/");
                     },
+                    onError: ({ error }) => {
+                        setError(error.message);
+                    },
+                }
+            );
+        } catch (err: any) {
+            // Catch any unhandled promise rejections
+            console.error(err);
+            setError("Something went wrong. Please try again.");
+        } finally {
+            // Always stop loading no matter what
+            setLoading(false);
+        }
+    };
+
+    const onSubmitSocial = async (provider: "google" | "github") => {
+        setError(null);
+        setLoading(true);
+
+        try {
+            await authClient.signIn.social(
+                {
+                    provider: provider,
+                    callbackURL: "/",
+                },
+                {
                     onError: ({ error }) => {
                         setError(error.message);
                     },
@@ -86,14 +114,13 @@ export const SignInView = () => {
                                     <FormField
                                         control={form.control}
                                         name="email"
-                                        render={({ field }) => {
-                                            return <FormItem>
-                                                <FormLabel>Email</FormLabel>
-                                                <Input
-                                                    type="email" placeholder="iam@example.com" {...field} />
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel htmlFor="email">Email</FormLabel>
+                                                <Input id="email" type="email" placeholder="iam@example.com" {...field} />
                                                 <FormMessage />
-                                            </FormItem>;
-                                        }}
+                                            </FormItem>
+                                        )}
                                     />
                                 </div>
 
@@ -101,14 +128,13 @@ export const SignInView = () => {
                                     <FormField
                                         control={form.control}
                                         name="password"
-                                        render={({ field }) => {
-                                            return <FormItem>
-                                                <FormLabel>Password</FormLabel>
-                                                <Input
-                                                    type="password" placeholder="********" {...field} />
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel htmlFor="password">Password</FormLabel>
+                                                <Input id="password" type="password" placeholder="********" {...field} />
                                                 <FormMessage />
-                                            </FormItem>;
-                                        }}
+                                            </FormItem>
+                                        )}
                                     />
                                 </div>
 
@@ -136,8 +162,12 @@ export const SignInView = () => {
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
-                                    <Button type="button" variant="outline" >Google</Button>
-                                    <Button type="button" variant="outline" >Github</Button>
+                                    <Button disabled={loading} onClick={() => onSubmitSocial("google")} type="button" variant="outline" >
+                                        <FaGoogle /> Google
+                                    </Button>
+                                    <Button disabled={loading} onClick={() => onSubmitSocial("github")} type="button" variant="outline" >
+                                        <FaGithub /> Github
+                                    </Button>
                                 </div>
 
                                 <div className="text-center text-sm">
