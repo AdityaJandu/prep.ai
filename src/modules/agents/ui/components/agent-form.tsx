@@ -1,0 +1,124 @@
+import { useTRPC } from "@/trpc/client";
+import { AgentGetOne } from "../../types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { agentsInsertSchema } from "../../schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { GeneratedAvatar } from "@/components/self/generated-avatar";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { LoadingState } from "@/components/self/loading-state";
+
+interface AgentFormProps {
+    onSuccess?: () => void;
+    onCancel?: () => void;
+    initialValues?: AgentGetOne;
+}
+
+
+export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps) => {
+    const trpc = useTRPC();
+    const queryClient = useQueryClient();
+
+    const createAgent = useMutation(
+        trpc.agents.create.mutationOptions({
+            onSuccess: async () => {
+                await queryClient.invalidateQueries(
+                    trpc.agents.getMany.queryOptions(),
+                );
+
+                if (initialValues?.id) {
+                    await queryClient.invalidateQueries(
+                        trpc.agents.getOne.queryOptions({ id: initialValues?.id }),
+                    );
+                }
+
+                onSuccess?.();
+            },
+            onError: (error) => {
+                toast.error(error.message);
+            },
+        }),
+    );
+
+    const form = useForm<z.infer<typeof agentsInsertSchema>>({
+        resolver: zodResolver(agentsInsertSchema),
+        defaultValues: {
+            name: initialValues?.name ?? "",
+            instruction: initialValues?.instruction ?? "",
+        },
+    });
+
+    const isEdit = !!initialValues?.id;
+    const isPending = createAgent.isPending;
+
+    const onSubmit = (values: z.infer<typeof agentsInsertSchema>) => {
+        if (isEdit) {
+            console.log("TODO update agent");
+        } else {
+            createAgent.mutate(values);
+        }
+    };
+
+
+    return (
+        <Form {...form}>
+            <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+                <GeneratedAvatar seed={form.watch("name")} variant="botttsNeutral" className="border size-16" />
+
+                <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel htmlFor="name">Name</FormLabel>
+                            <FormControl>
+                                <Input id="name" placeholder="e.g. Math Tutor or English Interview" type="text" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="instruction"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel htmlFor="instruction">Instruction</FormLabel>
+                            <FormControl>
+                                <Textarea id="instruction" placeholder="e.g. You're a helpful Math Tutor or English Interviewer." {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <div className="grid grid-cols-2 gap-x-4">
+                    {onCancel && (
+                        <Button variant="ghost" onClick={() => onCancel()} type="button" disabled={isPending} className="border">
+                            Cancel
+                        </Button>
+                    )}
+
+                    <Button type="submit" disabled={isPending} className="border">
+                        {isEdit ? "Update" : "Create"}
+                    </Button>
+                </div>
+            </form>
+        </Form>
+    )
+}
+

@@ -4,6 +4,8 @@ import { ErrorState } from "@/components/self/error-state";
 import { LoadingState } from "@/components/self/loading-state";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { ResponsiveDialog } from "@/components/self/responsive-dialog";
+import { Button } from "@/components/ui/button";
 
 export const AgentsView = () => {
     const trpc = useTRPC();
@@ -11,8 +13,6 @@ export const AgentsView = () => {
 
     return (
         <div className="flex flex-col justify-center items-center gap-4">
-            <h1>AgentsView</h1>
-            <br />
             <p>{JSON.stringify(data, null, 2)}</p>
         </div>
     );
