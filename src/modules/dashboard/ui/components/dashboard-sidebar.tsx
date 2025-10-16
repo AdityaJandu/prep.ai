@@ -59,7 +59,7 @@ export const DashboardSidebar = () => {
                                 firstSection.map((obj) => {
                                     return (
                                         <SidebarMenuButton asChild className={cn(
-                                            "h-10 hover:bg-linear-to-r/oklch border border-transparent hover:border-[#5d6b68]/20 from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50",
+                                            "h-10 hover:bg-linear-to-l/oklch border border-transparent hover:border-[#5d6b68]/50 from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50",
                                             pathName === obj.href && "bg-linear-to-r/oklch border-[#5d6b68]/20"
                                         )}
                                             isActive={pathName === obj.href}
