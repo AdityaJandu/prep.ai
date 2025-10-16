@@ -4,8 +4,6 @@ import { ErrorState } from "@/components/self/error-state";
 import { LoadingState } from "@/components/self/loading-state";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { ResponsiveDialog } from "@/components/self/responsive-dialog";
-import { Button } from "@/components/ui/button";
 import { DataTable } from "../components/data-table";
 import { columns } from "../components/columns";
 import { EmptyState } from "@/components/self/empty-state";
