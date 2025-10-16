@@ -1,5 +1,7 @@
+import { nanoid } from "nanoid";
 import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 
+// Created by BetterAuth
 export const user = pgTable("user", {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
@@ -13,7 +15,7 @@ export const user = pgTable("user", {
         .notNull(),
 });
 
-
+// Created by BetterAuth
 export const session = pgTable("session", {
     id: text("id").primaryKey(),
     expiresAt: timestamp("expires_at").notNull(),
@@ -29,7 +31,7 @@ export const session = pgTable("session", {
         .references(() => user.id, { onDelete: "cascade" }),
 });
 
-
+// Created by BetterAuth
 export const account = pgTable("account", {
     id: text("id").primaryKey(),
     accountId: text("account_id").notNull(),
@@ -50,7 +52,7 @@ export const account = pgTable("account", {
         .notNull(),
 });
 
-
+// Created by BetterAuth
 export const verification = pgTable("verification", {
     id: text("id").primaryKey(),
     identifier: text("identifier").notNull(),
@@ -63,3 +65,16 @@ export const verification = pgTable("verification", {
         .notNull(),
 });
 
+// My tables:
+// Creating schema for Agents:
+export const agents = pgTable("agents", {
+    id: text("id")
+        .primaryKey().$defaultFn(() => nanoid()),
+    name: text("name").notNull(),
+    userId: text("user_id")
+        .notNull()
+        .references(() => user.id, { onDelete: "cascade" }),
+    instruction: text("instruction").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
