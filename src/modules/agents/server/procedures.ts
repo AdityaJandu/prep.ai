@@ -2,13 +2,31 @@ import { z } from "zod";
 import { db } from "@/db";
 import { agents } from "@/db/schema";
 import { createTRPCRouter, baseProcedure, protectedProcedure } from "@/trpc/init";
-import { agentsInsertSchema } from "../schemas";
+import { agentsInsertSchema, agentUpdateSchema } from "../schemas";
 import { and, count, desc, eq, getTableColumns, ilike, sql } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, MIN_PAGE_SIZE } from "@/constants";
 
 export const agentsRouter = createTRPCRouter({
-    // We'll create with protected one:
+    // CREATE:
+    // Create a new Agent with protected procedure:
+    create: protectedProcedure
+        .input(agentsInsertSchema)
+        .mutation(
+            async ({ input, ctx }) => {
+                const [createdAgent] = await db
+                    .insert(agents)
+                    .values({
+                        ...input,
+                        userId: ctx.auth.user.id,
+                    })
+                    .returning();
+
+                return createdAgent;
+            }),
+
+    // READ:
+    // Procedure to get all the Agents for a user:
     getMany: protectedProcedure
         .input(z.object({
             page: z.number().default(DEFAULT_PAGE),
@@ -50,44 +68,85 @@ export const agentsRouter = createTRPCRouter({
             };
         }),
 
-    // GetOne Procedure:
-    getOne: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input, ctx }) => {
-        const [existingAgent] = await db
-            .select(
-                {
-                    ...getTableColumns(agents),
-                    meetingCount: sql<number>`10`,
-                }
-            )
-            .from(agents)
-            .where(
-                and(eq(agents.id, input.id), eq(agents.userId, ctx.auth.user.id))
-            );
+    // READ:
+    // Procedure to get a single agent for any user:
+    getOne: protectedProcedure
+        .input(z.object({ id: z.string() }))
+        .query(async ({ input, ctx }) => {
+            const [existingAgent] = await db
+                .select(
+                    {
+                        ...getTableColumns(agents),
+                        meetingCount: sql<number>`10`,
+                    }
+                )
+                .from(agents)
+                .where(
+                    and(
+                        eq(agents.id, input.id),
+                        eq(agents.userId, ctx.auth.user.id)
+                    )
+                );
 
-        if (!existingAgent) {
-            throw new TRPCError({
-                code: "NOT_FOUND",
-                message: "Agent not found or you don't have access to it.",
-            });
-        }
+            if (!existingAgent) {
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Agent not found or you don't have access to it.",
+                });
+            }
 
-        return existingAgent;
+            return existingAgent;
 
-    }),
-
-
-
-    // Create with protected procedure:
-    create: protectedProcedure.input(agentsInsertSchema).mutation(
-        async ({ input, ctx }) => {
-            const [createdAgent] = await db
-                .insert(agents)
-                .values({
-                    ...input,
-                    userId: ctx.auth.user.id,
-                })
-                .returning();
-
-            return createdAgent;
         }),
+
+    // UPDATE:
+    update: protectedProcedure
+        .input(agentUpdateSchema)
+        .mutation(async ({ input, ctx }) => {
+            const [updatedAgent] = await db
+                .update(agents)
+                .set(input)
+                .where(
+                    and(
+                        eq(agents.id, input.id),
+                        eq(agents.userId, ctx.auth.user.id)
+                    )
+                ).returning();
+
+            if (!updatedAgent) {
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Agent not found or you don't have access to it.",
+                });
+            }
+
+            return updatedAgent;
+        }),
+
+
+
+
+    // DELETE:
+    remove: protectedProcedure
+        .input(z.object({ id: z.string() }))
+        .mutation(
+            async ({ input, ctx }) => {
+                const [removedAgent] = await db
+                    .delete(agents)
+                    .where(
+                        and(
+                            eq(agents.id, input.id),
+                            eq(agents.userId, ctx.auth.user.id)
+                        ),
+                    ).returning();
+
+                if (!removedAgent) {
+                    throw new TRPCError({
+                        code: "NOT_FOUND",
+                        message: "Agent not found or you don't have access to it.",
+                    });
+                }
+                return removedAgent;
+            }),
+
 });
