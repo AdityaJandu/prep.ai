@@ -95,8 +95,15 @@ export const meetingsRouter = createTRPCRouter({
         .input(z.object({ id: z.string() }))
         .query(async ({ input, ctx }) => {
             const [existingMeeting] = await db
-                .select()
+                .select(
+                    {
+                        ...getTableColumns(meetings),
+                        agent: agents,
+                        duration: sql<number>`EXTRACT(EPOCH FROM (ended_at - started_at))`.as("duration"),
+                    }
+                )
                 .from(meetings)
+                .innerJoin(agents, eq(meetings.agentId, agents.id))
                 .where(
                     and(
                         eq(meetings.id, input.id),
@@ -140,7 +147,27 @@ export const meetingsRouter = createTRPCRouter({
         }),
 
 
-
     // DELETE:
+    remove: protectedProcedure
+        .input(z.object({ id: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const [removedMeeting] = await db
+                .delete(meetings)
+                .where(
+                    and(
+                        eq(meetings.id, input.id),
+                        eq(meetings.userId, ctx.auth.user.id)
+                    )
+                ).returning();
+
+            if (!removedMeeting) {
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Meeting not found or you don't have access to it.",
+                });
+            }
+
+            return removedMeeting;
+        })
 
 });
