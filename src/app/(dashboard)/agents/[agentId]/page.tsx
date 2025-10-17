@@ -13,8 +13,6 @@ import {
 } from "@/modules/agents/ui/views/agent-id-view";
 
 
-
-
 interface Props {
     params: Promise<{ agentId: string }>;
 };

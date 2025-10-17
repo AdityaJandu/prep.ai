@@ -19,7 +19,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { LoadingState } from "@/components/self/loading-state";
 
 interface AgentFormProps {
     onSuccess?: () => void;

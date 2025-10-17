@@ -5,13 +5,11 @@ import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-q
 
 import { ErrorState } from "@/components/self/error-state";
 import { LoadingState } from "@/components/self/loading-state";
-import { EmptyState } from "@/components/self/empty-state";
 import { AgentIdViewHeader } from "../components/agent-id-view-header";
 import { GeneratedAvatar } from "@/components/self/generated-avatar";
 import { Badge } from "@/components/ui/badge";
 import { VideoIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { error } from "console";
 import { toast } from "sonner";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useState } from "react";
@@ -28,7 +26,7 @@ export const AgentIdView = ({ agentId }: AgentIdViewProps) => {
 
     const [updateAgentDialogOpen, setUpdateAgentDialogOpen] = useState(false);
 
-    const { data } = useSuspenseQuery(
+    const { data, isPending } = useSuspenseQuery(
         trpc.agents.getOne.queryOptions({
             id: agentId
         })
@@ -124,4 +122,3 @@ export const AgentIdViewError = () => {
         />
     );
 };
-
