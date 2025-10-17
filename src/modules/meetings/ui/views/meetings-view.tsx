@@ -5,13 +5,22 @@ import { ErrorState } from "@/components/self/error-state";
 import { LoadingState } from "@/components/self/loading-state";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
-
+import { DataTable } from "@/components/self/data-table";
+import { columns } from "../components/columns";
+import { useRouter } from "next/navigation";
+import { useMeetingsFilters } from "../../hooks/use-meetings-filter";
+import { DataPagination } from "@/components/self/data-pagination";
 
 
 export const MeetingView = () => {
+    const router = useRouter();
+
+    const [filters, setFilters] = useMeetingsFilters();
 
     const trpc = useTRPC();
-    const { data } = useSuspenseQuery(trpc.meetings.getMany.queryOptions({}));
+    const { data } = useSuspenseQuery(trpc.meetings.getMany.queryOptions({
+        ...filters
+    }));
 
     if (data.items.length === 0) {
         return (
@@ -24,14 +33,17 @@ export const MeetingView = () => {
 
 
     return (
-        <div className="flex flex-col h-full w-full m-auto p-4 justify-center items-center">
-            <h1>MeetingView</h1>
-            <br />
-            <h1>DATA TABLE HERE</h1>
-            <br />
-            <p>
-                {JSON.stringify(data, null, 2)}
-            </p>
+        <div className="flex-1 pb-4 px-4 md:px-8 flex flex-col gap-y-4">
+            <DataTable
+                columns={columns}
+                data={data.items}
+                onRowClick={(row) => router.push(`/meetings/${row.id}`)}
+            />
+            <DataPagination
+                page={filters.page}
+                totalPages={data.totalPages}
+                onPageChange={(page) => { setFilters({ page }) }}
+            />
         </div>
     )
 }

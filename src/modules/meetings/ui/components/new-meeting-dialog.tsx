@@ -13,9 +13,6 @@ interface NewMeetingDialogProps {
 export const NewMeetingDialog = ({ open, onOpenChange }: NewMeetingDialogProps) => {
     const router = useRouter();
 
-
-
-
     return (
         <ResponsiveDialog
             title="New Meeting"
@@ -28,8 +25,7 @@ export const NewMeetingDialog = ({ open, onOpenChange }: NewMeetingDialogProps) 
                     onOpenChange(false);
                     router.push(`/meetings/${id}`)
                 }}
-                onCancel={() => onOpenChange}
-
+                onCancel={() => onOpenChange(false)}
             />
         </ResponsiveDialog>
     );
