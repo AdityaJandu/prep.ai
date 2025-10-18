@@ -24,15 +24,15 @@ export const UpcomingState = ({
 
             <div className="flex flex-col-reverse lg:flex-row lg:justify-center items-center gap-2 w-full">
                 <Button
-                    variant="secondary"
-                    className="border bg-red-200 hover:bg-red-400"
+                    variant="outline"
+                    className=" bg-red-200  min-w-[180px] hover:bg-red-400"
                     onClick={onCancelMeeting}
                     disabled={isCancelling}
                 >
                     <BanIcon />
                     <h5>Cancel Meeting</h5>
                 </Button>
-                <Button disabled={isCancelling} asChild className="hover:bg-[#34C759]">
+                <Button disabled={isCancelling} asChild className="hover:bg-[#34C759] min-w-[180px]">
                     <Link href={`/call/${meetingId}`}>
                         <VideoIcon />
                         <h5>Start Meeting</h5>

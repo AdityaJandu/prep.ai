@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
 import { NewAgentDialog } from "@/modules/agents/ui/components/new-agent-dialog";
+import { LoadingState } from "@/components/self/loading-state";
 
 interface MeetingFormProps {
     onSuccess?: (id?: string) => void;
@@ -37,6 +38,8 @@ export const MeetingForm = ({ onSuccess, onCancel, initialValues }: MeetingFormP
     const queryClient = useQueryClient();
 
     const [openNewAgentDialog, setOpenNewAgentDialog] = useState(false);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [agentSearch, setAgentSearch] = useState("");
 
@@ -92,7 +95,8 @@ export const MeetingForm = ({ onSuccess, onCancel, initialValues }: MeetingFormP
     });
 
     const isEdit = !!initialValues?.id;
-    const isPending = createMeeting.isPending || updateMeeting.isPending;
+    const isCreatePending = createMeeting.isPending;
+    const isUpdatePending = updateMeeting.isPending;
 
     const onSubmit = (values: z.infer<typeof meetingsInsertSchema>) => {
         if (isEdit) {
@@ -102,6 +106,24 @@ export const MeetingForm = ({ onSuccess, onCancel, initialValues }: MeetingFormP
         } else {
             createMeeting.mutate(values);
         }
+    };
+
+    if (isCreatePending) {
+        return (
+            <LoadingState
+                title="Adding meeting"
+                descr="Please wait while we add your meeting"
+            />
+        );
+    };
+
+    if (isUpdatePending) {
+        return (
+            <LoadingState
+                title="Updating meeting"
+                descr="Please wait while we update your meeting"
+            />
+        );
     };
 
 
@@ -177,12 +199,12 @@ export const MeetingForm = ({ onSuccess, onCancel, initialValues }: MeetingFormP
 
                     < div className="grid grid-cols-2 gap-x-4" >
                         {onCancel && (
-                            <Button variant="ghost" onClick={() => onCancel()} type="button" disabled={isPending} className="border">
+                            <Button variant="ghost" onClick={() => onCancel()} type="button" className="border">
                                 Cancel
                             </Button>
                         )}
 
-                        <Button type="submit" disabled={isPending} className="border">
+                        <Button type="submit" className="border">
                             {isEdit ? "Update" : "Create"}
                         </Button>
                     </div >

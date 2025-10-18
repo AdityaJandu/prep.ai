@@ -19,6 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { LoadingState } from "@/components/self/loading-state";
 
 interface AgentFormProps {
     onSuccess?: () => void;
@@ -67,6 +68,9 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
         }),
     );
 
+    const isCreatePending = createAgent.isPending;
+    const isUpdatePending = updateAgent.isPending;
+
     const form = useForm<z.infer<typeof agentsInsertSchema>>({
         resolver: zodResolver(agentsInsertSchema),
         defaultValues: {
@@ -76,7 +80,6 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
     });
 
     const isEdit = !!initialValues?.id;
-    const isPending = createAgent.isPending || updateAgent.isPending;
 
     const onSubmit = (values: z.infer<typeof agentsInsertSchema>) => {
         if (isEdit) {
@@ -86,6 +89,24 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
         } else {
             createAgent.mutate(values);
         }
+    };
+
+    if (isCreatePending) {
+        return (
+            <LoadingState
+                title="Adding agent"
+                descr="Please wait while we add your agent"
+            />
+        );
+    };
+
+    if (isUpdatePending) {
+        return (
+            <LoadingState
+                title="Updating agent"
+                descr="Please wait while we update your agent"
+            />
+        );
     };
 
 
@@ -124,12 +145,12 @@ export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps
 
                 <div className="grid grid-cols-2 gap-x-4">
                     {onCancel && (
-                        <Button variant="ghost" onClick={() => onCancel()} type="button" disabled={isPending} className="border">
+                        <Button variant="ghost" onClick={() => onCancel()} type="button" className="border">
                             Cancel
                         </Button>
                     )}
 
-                    <Button type="submit" disabled={isPending} className="border">
+                    <Button type="submit" className="border">
                         {isEdit ? "Update" : "Create"}
                     </Button>
                 </div>

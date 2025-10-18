@@ -26,22 +26,44 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { GeneratedAvatar } from "@/components/self/generated-avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { LoadingState } from "@/components/self/loading-state";
+import { toast } from "sonner";
 
 export const DashboardUserButton = () => {
     const { data, isPending } = authClient.useSession();
     const router = useRouter();
     const isMobile = useIsMobile();
 
-    const onLogOut = () => {
-        authClient.signOut({
-            fetchOptions: {
-                onSuccess: () => router.push("/sign-in"),
-            },
-        });
+    const [isLoading, setIsLoading] = useState(false);
+
+    const onLogOut = async () => {
+        setIsLoading(true);
+        try {
+            await authClient.signOut({
+                fetchOptions: {
+                    onSuccess: () => router.push("/sign-in"),
+                },
+            });
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
+
     };
 
-    if (isPending || !data?.user) {
+    if (!data?.user || isPending) {
         return null;
+    }
+
+    if (isLoading) {
+        return (
+            <LoadingState
+                title={"Log out"}
+                descr={"Please wait while we log you out"}
+            />
+        );
     }
 
     if (isMobile) {

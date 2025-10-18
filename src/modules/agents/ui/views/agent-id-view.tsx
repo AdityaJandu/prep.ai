@@ -45,6 +45,8 @@ export const AgentIdView = ({ agentId }: AgentIdViewProps) => {
         }),
     );
 
+    const isDeletePening = removeAgent.isPending;
+
     const [RemoveConfirmation, confirmRemove] = useConfirm(
         "Are your sure?",
         `The following action will remove ${data.meetingCount} associated meetings`
@@ -58,6 +60,14 @@ export const AgentIdView = ({ agentId }: AgentIdViewProps) => {
         removeAgent.mutate({ id: agentId });
     };
 
+    if (isDeletePening) {
+        return (
+            <LoadingState
+                title="Deleting agent"
+                descr="Please wait while we delete your agent"
+            />
+        );
+    };
 
 
     return (

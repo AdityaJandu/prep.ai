@@ -49,6 +49,8 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
         }),
     );
 
+    const isDeletePending = removeMeeting.isPending;
+
     const [RemoveConfirmation, confirmRemove] = useConfirm(
         "Are your sure?",
         `The following action will remove ${data.name} associated meetings`
@@ -70,6 +72,14 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
     const isCancelled = data.status === "cancelled";
     const isUpcoming = data.status === "upcoming";
 
+    if (isDeletePending) {
+        return (
+            <LoadingState
+                title="Deleting meeting"
+                descr="Please wait while we delete your meeting"
+            />
+        );
+    };
 
 
     return (

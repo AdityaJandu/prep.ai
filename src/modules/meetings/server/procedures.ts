@@ -7,8 +7,38 @@ import { TRPCError } from "@trpc/server";
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, MIN_PAGE_SIZE } from "@/constants";
 import { meetingsInsertSchema, meetingUpdateSchema } from "../schemas";
 import { MeetingStatus } from "../types";
+import { streamVideo } from "@/lib/stream-video";
+import { generateAvatar } from "@/lib/avatar";
 
 export const meetingsRouter = createTRPCRouter({
+    // Generate Token:
+    // For stream video:
+    generateToken: protectedProcedure
+        .mutation(async ({ ctx }) => {
+            await streamVideo.upsertUsers([
+                {
+                    id: ctx.auth.user.id,
+                    name: ctx.auth.user.name,
+                    role: "admin",
+                    image:
+                        ctx.auth.user.image
+                        ?? generateAvatar({ seed: ctx.auth.user.name, variant: "initials" })
+                }
+            ]);
+
+            const expiration = Math.floor(Date.now() / 1000) * 3600;
+            const issuedAt = Math.floor(Date.now() / 1000) - 60;
+
+            const generatedToken = streamVideo.generateUserToken({
+                user_id: ctx.auth.user.id,
+                validity_in_seconds: issuedAt,
+                exp: expiration,
+            });
+
+            return generatedToken;
+        }),
+
+
     // CREATE:
     // Create a new meeting with protected procedure:
     create: protectedProcedure
@@ -23,7 +53,66 @@ export const meetingsRouter = createTRPCRouter({
                     })
                     .returning();
 
-                // TODO: Create Stream Call , Upsert Stream Users
+                if (!createdMeeting) {
+                    throw new TRPCError({
+                        code: "NOT_FOUND",
+                        message: "Meeting not found or you don't have access to it.",
+                    });
+                }
+
+                // Create Stream Call , Upsert Stream Users
+                const callType = 'default';
+                const callId = createdMeeting.id;
+
+                const call = streamVideo.video.call(callType, callId);
+
+
+                await call.create({
+                    data: {
+                        created_by_id: ctx.auth.user.id,
+                        custom: {
+                            meetingId: createdMeeting.id,
+                            meetingName: createdMeeting.name,
+                        },
+
+                        settings_override: {
+                            transcription: {
+                                language: "en",
+                                mode: "auto-on",
+                                closed_caption_mode: "auto-on",
+                            },
+
+                            recording: {
+                                mode: "auto-on",
+                                quality: "1080p",
+                            },
+                        },
+                    },
+                });
+
+                const [existingAgent] = await db
+                    .select()
+                    .from(agents)
+                    .where(
+                        eq(agents.id, createdMeeting.agentId)
+                    );
+
+
+                if (!existingAgent) {
+                    throw new TRPCError({
+                        code: "NOT_FOUND",
+                        message: "Agent not found or you don't have access to it.",
+                    });
+                }
+
+                await streamVideo.upsertUsers([
+                    {
+                        id: existingAgent.id,
+                        name: existingAgent.name,
+                        role: "user",
+                        image: generateAvatar({ seed: existingAgent.name, variant: "botttsNeutral" }),
+                    }
+                ]);
 
                 return createdMeeting;
             }),
