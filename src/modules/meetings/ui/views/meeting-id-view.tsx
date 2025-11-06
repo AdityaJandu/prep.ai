@@ -18,6 +18,7 @@ import { UpcomingState } from "../components/meeting_states/upcoming-state";
 import { ActiveState } from "../components/meeting_states/active-state";
 import { CancelledState } from "../components/meeting_states/cancelled-state";
 import { ProcessingState } from "../components/meeting_states/processing-state";
+import { CompletedState } from "../components/meeting_states/completed-state";
 
 interface MeetingIdViewProps {
     meetingId: string;
@@ -99,46 +100,57 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
                     onEdit={() => setUpdateAgentDialogOpen(true)}
                 />
 
-                <div className=" bg-white rounded-lg border px-4 py-5 gap-y-5 flex flex-col">
-                    <div className="flex items-center flex-col md:flex-row gap-x-3.5">
-                        <GeneratedAvatar
-                            seed={data.name}
-                            variant="botttsNeutral"
-                            className="size-18"
-                        />
-                        <h2 className="text-2xl font-medium">{data.name}</h2>
-                        <Badge variant="outline" className="flex mt-5 mb-3 md:my-0 rounded-2xl md:ml-auto px-2 py-1 items-center gap-x-2 [&>svg]:size-4">
-                            <VideoIcon className="text-blue-600" />
-                            <h6 className="text-xs">{data.name} </h6>
-                        </Badge>
+                {
+                    !isCompleted &&
+                    <div className=" bg-white rounded-lg border px-4 py-5 gap-y-5 flex flex-col">
+                        <div className="flex items-center flex-col md:flex-row gap-x-3.5">
+                            <GeneratedAvatar
+                                seed={data.name}
+                                variant="botttsNeutral"
+                                className="size-18"
+                            />
+                            <h2 className="text-2xl font-medium">{data.name}</h2>
+                            <Badge variant="outline" className="flex mt-5 mb-3 md:my-0 rounded-2xl md:ml-auto px-2 py-1 items-center gap-x-2 [&>svg]:size-4">
+                                <VideoIcon className="text-blue-600" />
+                                <h6 className="text-xs">{data.name} </h6>
+                            </Badge>
+                        </div>
                     </div>
-                </div>
+                }
 
-                <div className="bg-white rounded-lg border sm:px-2 px-4 py-8 gap-y-5 flex flex-col">
-                    {isUpcoming &&
-                        <UpcomingState
-                            meetingId={meetingId}
-                            onCancelMeeting={() => { }}
-                            isCancelling={false}
-                        />
-                    }
+                {
+                    !isCompleted &&
+                    <div className="bg-white rounded-lg border sm:px-2 px-4 py-8 gap-y-5 flex flex-col">
+                        {isUpcoming &&
+                            <UpcomingState
+                                meetingId={meetingId}
+                                onCancelMeeting={() => { }}
+                                isCancelling={false}
+                            />
+                        }
 
-                    {
-                        isActive &&
-                        <ActiveState meetingId={meetingId} />
-                    }
+                        {
+                            isActive &&
+                            <ActiveState meetingId={meetingId} />
+                        }
 
-                    {
-                        isCancelled &&
-                        <CancelledState meetingId={meetingId} />
-                    }
+                        {
+                            isCancelled &&
+                            <CancelledState meetingId={meetingId} />
+                        }
 
-                    {
-                        isProcessing &&
-                        <ProcessingState meetingId={meetingId} />
-                    }
+                        {
+                            isProcessing &&
+                            <ProcessingState meetingId={meetingId} />
+                        }
 
-                </div>
+                    </div>
+                }
+
+                {
+                    isCompleted &&
+                    <CompletedState data={data} />
+                }
 
             </div>
         </>
