@@ -28,7 +28,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { LoadingState } from "@/components/self/loading-state";
-import { toast } from "sonner";
 
 export const DashboardUserButton = () => {
     const { data, isPending } = authClient.useSession();

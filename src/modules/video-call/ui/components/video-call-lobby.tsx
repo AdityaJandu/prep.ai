@@ -11,7 +11,6 @@ import {
 } from "@stream-io/video-react-sdk";
 
 import "@stream-io/video-react-sdk/dist/css/styles.css";
-import { auth } from "@/lib/auth";
 import { authClient } from "@/lib/auth-client";
 import { generateAvatar } from "@/lib/avatar";
 import { Button } from "@/components/ui/button";

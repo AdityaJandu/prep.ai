@@ -19,7 +19,7 @@ const options = [
         children: (
             <div className="flex items-center gap-x-4 capitalize">
                 <ClockArrowUpIcon />
-                <p>MeetingStatus.Upcoming</p>
+                <p>Upcoming</p>
             </div>
         ),
     },
@@ -31,7 +31,7 @@ const options = [
         children: (
             <div className="flex items-center gap-x-4 capitalize">
                 <LoaderIcon className="animate-spin" />
-                <p>MeetingStatus.Processing</p>
+                <p>Processing</p>
             </div>
         ),
     },
@@ -43,7 +43,7 @@ const options = [
         children: (
             <div className="flex items-center gap-x-4 capitalize">
                 <VideoIcon />
-                <p>MeetingStatus.Active</p>
+                <p>Active</p>
             </div>
         ),
     },
@@ -55,7 +55,7 @@ const options = [
         children: (
             <div className="flex items-center gap-x-4 capitalize">
                 <CircleCheckIcon />
-                <p>MeetingStatus.Completed</p>
+                <p>Completed</p>
             </div>
         ),
     },
@@ -67,7 +67,7 @@ const options = [
         children: (
             <div className="flex items-center gap-x-4 capitalize">
                 <CircleXIcon />
-                <p>MeetingStatus.Cancelled</p>
+                <p>Cancelled</p>
             </div>
         ),
     },

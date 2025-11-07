@@ -10,7 +10,6 @@ import { MeetingStatus, StreamTranscription } from "../types";
 import { streamVideo } from "@/lib/stream-video";
 import { generateAvatar } from "@/lib/avatar";
 import JSONL from "jsonl-parse-stringify";
-import { GeneratedAvatar } from "@/components/self/generated-avatar";
 import { streamChat } from "@/lib/stream-chat";
 
 export const meetingsRouter = createTRPCRouter({

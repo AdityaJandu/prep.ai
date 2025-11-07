@@ -29,9 +29,9 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
     const queryClient = useQueryClient();
     const trpc = useTRPC();
 
-    const [updateAgentDialogOpen, setUpdateAgentDialogOpen] = useState(false);
+    const [updateMeetingDialogOpen, setUpdateMeetingDialogOpen] = useState(false);
 
-    const { data, isPending } = useSuspenseQuery(
+    const { data } = useSuspenseQuery(
         trpc.meetings.getOne.queryOptions({
             id: meetingId
         })
@@ -50,6 +50,7 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
         }),
     );
 
+
     const isDeletePending = removeMeeting.isPending;
 
     const [RemoveConfirmation, confirmRemove] = useConfirm(
@@ -64,6 +65,7 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
 
         removeMeeting.mutate({ id: meetingId });
     };
+
 
 
     // Constants for meeting status:
@@ -87,8 +89,8 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
         <>
             <RemoveConfirmation />
             <UpdateMeetingDialog
-                open={updateAgentDialogOpen}
-                onOpenChange={setUpdateAgentDialogOpen}
+                open={updateMeetingDialogOpen}
+                onOpenChange={setUpdateMeetingDialogOpen}
                 initialValues={data}
             />
 
@@ -97,7 +99,7 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
                     meetingId={meetingId}
                     meetingName={data.name}
                     onRemove={handleRemoveMeeting}
-                    onEdit={() => setUpdateAgentDialogOpen(true)}
+                    onEdit={() => setUpdateMeetingDialogOpen(true)}
                 />
 
                 {
@@ -124,7 +126,7 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
                         {isUpcoming &&
                             <UpcomingState
                                 meetingId={meetingId}
-                                onCancelMeeting={() => { }}
+                                onCancelMeeting={handleRemoveMeeting}
                                 isCancelling={false}
                             />
                         }

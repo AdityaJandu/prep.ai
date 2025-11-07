@@ -2,9 +2,7 @@
 
 import { authClient } from "@/lib/auth-client";
 import { LoadingState } from "@/components/self/loading-state";
-import { EmptyState } from "@/components/self/empty-state";
 import { ChatUI } from "./chat-ui";
-import { generateAvatar } from "@/lib/avatar";
 
 interface Props {
     meetingId: string,

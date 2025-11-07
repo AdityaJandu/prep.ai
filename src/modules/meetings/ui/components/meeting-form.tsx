@@ -39,8 +39,6 @@ export const MeetingForm = ({ onSuccess, onCancel, initialValues }: MeetingFormP
 
     const [openNewAgentDialog, setOpenNewAgentDialog] = useState(false);
 
-    const [isLoading, setIsLoading] = useState(false);
-
     const [agentSearch, setAgentSearch] = useState("");
 
     const agents = useQuery(

@@ -6,7 +6,6 @@ import { GeneratedAvatar } from "@/components/self/generated-avatar";
 
 import {
     CornerDownRightIcon,
-    VideoIcon,
     CircleCheckIcon,
     CircleXIcon,
     ClockFadingIcon,

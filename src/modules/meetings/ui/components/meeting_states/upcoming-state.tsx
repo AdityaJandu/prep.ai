@@ -30,7 +30,7 @@ export const UpcomingState = ({
                     disabled={isCancelling}
                 >
                     <BanIcon />
-                    <h5>Cancel Meeting</h5>
+                    <h5>Remove Meeting</h5>
                 </Button>
                 <Button disabled={isCancelling} asChild className="hover:bg-[#34C759] min-w-[180px]">
                     <Link href={`/call/${meetingId}`}>
