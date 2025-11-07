@@ -94,7 +94,6 @@ export const columns: ColumnDef<MeetingGetMany[number]>[] = [
         accessorKey: "duration",
         header: "Duration",
         cell: ({ row }) => {
-            const StatusIcon = statusIconMap[row.original.status as keyof typeof statusIconMap];
 
             return (
                 <Badge

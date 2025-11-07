@@ -26,7 +26,7 @@ interface Props {
     userImage: string | null | undefined,
 };
 
-export const ChatUI = ({ meetingId, meetingName, userId, userName, userImage }: Props) => {
+export const ChatUI = ({ meetingId, userId, userName, userImage }: Props) => {
     const trpc = useTRPC();
     const { mutateAsync: generateChatToken } = useMutation(
         trpc.meetings.generateChatToken.mutationOptions(),

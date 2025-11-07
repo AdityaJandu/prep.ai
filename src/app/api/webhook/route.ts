@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
         payLoad = JSON.parse(body) as Record<string, unknown>;
     } catch (error) {
         return NextResponse.json(
-            { error: "Invalid JSON" },
+            { error: error },
             { status: 400 },
         );
     }

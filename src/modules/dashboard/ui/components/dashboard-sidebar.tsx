@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 
 
 // Local imports:
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, } from "@/components/ui/sidebar";
 import { DashboardUserButton } from "./dashboard-user-buttom";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";

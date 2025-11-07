@@ -8,7 +8,7 @@ interface Props {
 };
 
 export const generateAvatar = ({ seed, variant }: Props) => {
-    var avatar;
+    let avatar;
 
     if (variant == "botttsNeutral") {
         avatar = createAvatar(botttsNeutral, { seed });

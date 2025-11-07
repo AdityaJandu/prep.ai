@@ -26,7 +26,7 @@ export const AgentIdView = ({ agentId }: AgentIdViewProps) => {
 
     const [updateAgentDialogOpen, setUpdateAgentDialogOpen] = useState(false);
 
-    const { data, isPending } = useSuspenseQuery(
+    const { data } = useSuspenseQuery(
         trpc.agents.getOne.queryOptions({
             id: agentId
         })

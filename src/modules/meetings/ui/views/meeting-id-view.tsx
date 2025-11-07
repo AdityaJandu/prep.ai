@@ -138,12 +138,12 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
 
                         {
                             isCancelled &&
-                            <CancelledState meetingId={meetingId} />
+                            <CancelledState />
                         }
 
                         {
                             isProcessing &&
-                            <ProcessingState meetingId={meetingId} />
+                            <ProcessingState />
                         }
 
                     </div>

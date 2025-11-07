@@ -70,7 +70,7 @@ export const SignUpView = () => {
                     },
                 }
             );
-        } catch (err: any) {
+        } catch (err) {
             // Catch any unhandled promise rejections
             console.error(err);
             setError("Something went wrong. Please try again.");
@@ -96,7 +96,7 @@ export const SignUpView = () => {
                     },
                 }
             );
-        } catch (err: any) {
+        } catch (err) {
             // Catch any unhandled promise rejections
             console.error(err);
             setError("Something went wrong. Please try again.");
@@ -119,7 +119,7 @@ export const SignUpView = () => {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
                             <div className="flex flex-col gap-6">
                                 <div className="flex flex-col items-center text-center">
-                                    <h1 className="text-2xl font-semibold">Let's get started</h1>
+                                    <h1 className="text-2xl font-semibold">Let&apos;s get started</h1>
                                     <p className="text-muted-foreground text-balance">Create a new account</p>
                                 </div>
 

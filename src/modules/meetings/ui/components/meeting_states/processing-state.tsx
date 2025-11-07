@@ -1,12 +1,7 @@
 import { EmptyState } from "@/components/self/empty-state";
 
-interface Props {
-    meetingId: string;
-};
 
-export const ProcessingState = ({
-    meetingId,
-}: Props) => {
+export const ProcessingState = () => {
     return (
         <div >
             <EmptyState

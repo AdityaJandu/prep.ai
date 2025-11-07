@@ -61,7 +61,7 @@ export const SignInView = () => {
                     },
                 }
             );
-        } catch (err: any) {
+        } catch (err) {
             // Catch any unhandled promise rejections
             console.error(err);
             setError("Something went wrong. Please try again.");
@@ -87,7 +87,7 @@ export const SignInView = () => {
                     },
                 }
             );
-        } catch (err: any) {
+        } catch (err) {
             // Catch any unhandled promise rejections
             console.error(err);
             setError("Something went wrong. Please try again.");
@@ -171,7 +171,7 @@ export const SignInView = () => {
                                 </div>
 
                                 <div className="text-center text-sm">
-                                    Don't have an account? <Link href="/sign-up" className="font-bold" >Sign up</Link>
+                                    Don&apos;t have an account? <Link href="/sign-up" className="font-bold" >Sign up</Link>
                                 </div>
                             </div>
                         </form>
