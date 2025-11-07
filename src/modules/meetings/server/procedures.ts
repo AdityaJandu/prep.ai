@@ -338,6 +338,37 @@ export const meetingsRouter = createTRPCRouter({
             return updatedMeeting;
         }),
 
+    // UPDATE MEETING:
+    updateStatus: protectedProcedure
+        .input(z.object({ id: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const [toBeUpdated] = await db
+                .select()
+                .from(meetings)
+                .where(
+                    and(
+                        eq(meetings.id, input.id),
+                        eq(meetings.userId, ctx.auth.user.id)
+                    )
+                );
+
+            if (!toBeUpdated) {
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Meeting not found or you don't have access to it.",
+                });
+            }
+
+            const [updated] = await db
+                .update(meetings)
+                .set({ status: "cancelled" })
+                .where(eq(meetings.id, input.id))
+                .returning();
+
+            return updated;
+        }),
+
+
 
     // DELETE:
     remove: protectedProcedure

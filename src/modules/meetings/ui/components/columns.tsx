@@ -100,8 +100,8 @@ export const columns: ColumnDef<MeetingGetMany[number]>[] = [
                     variant="outline"
                     className="flex items-center gap-x-2 [&>svg]:size-3 p-2 rounded-2xl"
                 >
-                    <ClockFadingIcon className="text-blue-600" />
-                    <p className="text-[9px]">{row.original.duration ? formatTimeDuration(row.original.duration) : "Meeting pending"}</p>
+                    <ClockFadingIcon className={cn("text-blue-600 ", row.original.status === "cancelled" ? statusColorMap[row.original.status as keyof typeof statusColorMap] : "")} />
+                    <p className="text-[9px]">{row.original.duration ? formatTimeDuration(row.original.duration) : row.original.status === "cancelled" ? "Cancelled" : "Meeting pending"}</p>
                 </Badge>
             );
         }

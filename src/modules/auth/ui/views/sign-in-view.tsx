@@ -19,6 +19,8 @@ import { authClient } from "@/lib/auth-client";
 import { Spinner } from "@/components/ui/spinner";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 
+import Image from "next/image";
+
 
 
 // Form Schema:
@@ -177,7 +179,7 @@ export const SignInView = () => {
                         </form>
                     </Form>
                     <div className="bg-radial from-pink-200 to-pink-400 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
-                        <img src="/logo.svg" alt="Logo" className="w-[92px] h-[92px] pt-4" />
+                        <Image src={"/logo.svg"} alt={"Logo"} width={92} height={92} className="pt-4" />
                         <p className="text-2xl font-semibold text-purple-800 pb-4">
                             prep.ai
                         </p>

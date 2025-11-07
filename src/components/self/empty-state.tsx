@@ -26,7 +26,7 @@ export const EmptyState = ({
             <div className="flex flex-col justify-center gap-y-2 pb-3 max-w-md mx-auto items-center">
                 <h6 className="text-lg font-medium">{title}</h6>
                 <p className={cn(
-                    "text-sm text-muted-foreground",
+                    "text-sm text-muted-foreground text-center",
                     classNamePara,
                 )}>{descr}</p>
             </div>

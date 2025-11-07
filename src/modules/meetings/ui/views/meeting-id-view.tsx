@@ -50,6 +50,18 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
         }),
     );
 
+    const cancelMeeting = useMutation(
+        trpc.meetings.updateStatus.mutationOptions({
+            onSuccess: async () => {
+                toast.success("Meeting cancelled successfully!");
+                await queryClient.invalidateQueries(trpc.meetings.getMany.queryOptions({}));
+                router.push("/meetings");
+            },
+            onError: (error) => {
+                toast.error(error.message);
+            },
+        }),
+    );
 
     const isDeletePending = removeMeeting.isPending;
 
@@ -58,12 +70,25 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
         `The following action will remove ${data.name} associated meetings`
     );
 
+    const [CancelConfirmation, confirmCancel] = useConfirm(
+        "Are your sure?",
+        `The following action will cancel ${data.name} associated meetings`
+    );
+
     const handleRemoveMeeting = async () => {
         const ok = await confirmRemove();
 
         if (!ok) return;
 
         removeMeeting.mutate({ id: meetingId });
+    };
+
+    const handleCancelMeeting = async () => {
+        const ok = await confirmCancel();
+
+        if (!ok) return;
+
+        cancelMeeting.mutate({ id: meetingId });
     };
 
 
@@ -88,6 +113,7 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
     return (
         <>
             <RemoveConfirmation />
+            <CancelConfirmation />
             <UpdateMeetingDialog
                 open={updateMeetingDialogOpen}
                 onOpenChange={setUpdateMeetingDialogOpen}
@@ -126,7 +152,7 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
                         {isUpcoming &&
                             <UpcomingState
                                 meetingId={meetingId}
-                                onCancelMeeting={handleRemoveMeeting}
+                                onCancelMeeting={handleCancelMeeting}
                                 isCancelling={false}
                             />
                         }
