@@ -62,7 +62,7 @@ export const ChatUI = ({ meetingId, userId, userName, userImage }: Props) => {
             <Chat client={client}>
                 <Channel channel={channel}>
                     <Window>
-                        <div className="flex-1 overflow-y-auto max-h-[calc(100vh-23rem)] border-b">
+                        <div className="flex-1 overflow-y-auto min-h-[400px] max-h-[500px] border-b">
                             <MessageList />
                         </div>
                         <MessageInput />
