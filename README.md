@@ -1,36 +1,185 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# **Prep.ai – AI-Powered Virtual Interview & Collaboration Platform**
 
-## Getting Started
+Prep.ai is a modern, intelligent platform that helps users prepare for interviews, brainstorm ideas, and collaborate using personalized AI agents. Built with a fully serverless, type-safe architecture, it brings together **chat**, **voice**, and **screen sharing** for seamless virtual meetings.
 
-First, run the development server:
+---
+
+## 🚀 Features
+
+### 🤖 Personalized AI Agents
+- Create AI agents for interview prep, brainstorming, ideation, or meeting assistance.
+- Context-aware and adaptive responses for more realistic interactions.
+
+### 💬 Real-Time Chat
+- Clean, fast chat interface.
+- Powered by tRPC + Next.js for fully type-safe communication.
+
+### 🔊 Voice Interaction
+- Supports natural, hands-free interaction with AI.
+- Real-time audio processing.
+
+### 🖥️ Screen Sharing
+- Integrated WebRTC screen sharing.
+- Ideal for coding rounds, design walkthroughs, and team collaboration.
+
+### 📝 Auto Notes & Summaries
+- AI-generated summaries and key points after each session.
+
+---
+
+## 🏗️ Tech Stack
+
+### **Core Framework**
+- **Next.js (App Router)**
+- **TypeScript**
+
+### **Serverless Backend**
+- **tRPC** – end-to-end type safety  
+- **Inngest** – background jobs, workflows, scheduled tasks  
+- **Better Auth** – authentication & sessions  
+
+### **Database Layer**
+- **Neon** – serverless Postgres  
+- **Drizzle ORM** – schema-first SQL with migrations  
+
+### **AI & Real-Time**
+- LLM integration (OpenAI / custom)
+- WebRTC for voice & screen sharing
+
+---
+
+## 📁 Project Structure
+
+```
+
+prep.ai/
+├── src/
+│   ├── app/               # Next.js App Router routes
+│   ├── components/        # Reusable UI components
+│   ├── db/                # Drizzle schemas, queries, migrations
+│   ├── hooks/             # Custom React hooks
+│   ├── inngest/           # Inngest functions, workflows, jobs
+│   ├── lib/               # Utilities, helpers, configs
+│   ├── modules/           # Feature-based modules
+│   │   ├── agents/        # AI agent logic & UI
+│   │   ├── auth/          # Better Auth (login, register, session)
+│   │   ├── dashboard/     # User dashboard
+│   │   ├── home/          # Landing & home pages
+│   │   ├── meetings/      # Meeting creation & scheduling
+│   │   └── video-call/    # WebRTC calls & screen sharing
+│   ├── trpc/              # tRPC routers & API server
+│   └── constants.ts       # Global constants
+├── public/                # Static assets
+├── drizzle/               # Drizzle migrations
+├── package.json
+└── README.md
+
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/AdityaJandu/prep.ai.git
+cd prep.ai
+````
+
+### 2️⃣ Install dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Configure environment variables
+
+Create a `.env.local` file:
+
+```
+
+# -----------------------------------------
+# BetterAuth (Email & Password Auth)
+# -----------------------------------------
+BETTER_AUTH_SECRET=""
+BETTER_AUTH_URL="http://localhost:3000"
+
+# -----------------------------------------
+# OAuth Providers (GitHub & Google)
+# -----------------------------------------
+GITHUB_CLIENT_ID=""
+GITHUB_CLIENT_SECRET=""
+
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+
+# -----------------------------------------
+# App URL (tRPC / Router)
+# -----------------------------------------
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+
+# -----------------------------------------
+# Stream (Video & Chat)
+# -----------------------------------------
+NEXT_PUBLIC_STREAM_VIDEO_API_KEY=""
+STREAM_VIDEO_SECRET_KEY=""
+
+NEXT_PUBLIC_STREAM_CHAT_API_KEY=""
+STREAM_CHAT_SECRET_KEY=""
+
+# -----------------------------------------
+# OpenAI API Key
+# -----------------------------------------
+OPENAI_API_KEY=""
+
+# -----------------------------------------
+# Gemini API Key
+# -----------------------------------------
+GEMINI_API_KEY=""
+
+```
+
+### 4️⃣ Run Drizzle migrations
+
+```bash
+npm run db:push
+```
+
+### 5️⃣ Start webhook server
+
+```bash
+npm run webhook
+```
+
+### 6️⃣ Start development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App runs at:
+👉 **[http://localhost:3000](http://localhost:3000)**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧠 Why Prep.ai?
 
-## Learn More
+* Realistic AI interview simulations
+* Built for brainstorming and ideation
+* Crisp voice interaction and screen sharing
+* Type-safe, serverless architecture
+* Perfect for job seekers, students, and teams
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤝 Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Fork the repo
+2. Create a feature branch
+3. Commit your changes
+4. Open a pull request
 
-## Deploy on Vercel
+Contributions and suggestions are welcome!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
