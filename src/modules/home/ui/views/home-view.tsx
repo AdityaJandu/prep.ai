@@ -15,10 +15,10 @@ export const HomeView = () => {
 
                 {/* Hero Section */}
                 <section className="container mx-auto max-w-6xl px-4 py-20 text-center sm:py-32">
-                    <h1 className="text-4xl font-extrabold tracking-tight md:text-6xl">
+                    <h1 className="text-5xl font-extrabold tracking-tight md:text-6xl">
                         Stop Practicing in the Mirror.
                         <br />
-                        <span className="pt-2 bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
                             Start Interviewing with AI.
                         </span>
                     </h1>
@@ -32,14 +32,14 @@ export const HomeView = () => {
                             href="/meetings"
                             className={buttonVariants({ size: "lg" })}
                         >
-                            Get Started for Free
+                            Start Meetings for Free
                         </Link>
                     </div>
                 </section>
 
                 {/* Key Features Section */}
                 <section className="bg-gray-50 py-24">
-                    <div className="container mx-auto max-w-6xl px-4">
+                    <div className="container mx-auto max-w-6xl px-8">
                         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
                             <div className="flex flex-col items-center text-center">
                                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-pink-100 text-pink-600">
@@ -92,31 +92,31 @@ export const HomeView = () => {
                             How it Works
                         </h2>
                         <div className="mt-12 space-y-12">
-                            <div className="flex flex-col items-center gap-6 md:flex-row">
-                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-900 text-white text-2xl font-bold">1</div>
+                            <div className="flex flex-col items-center gap-6 lg:flex-row">
+                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-900 text-white text-2xl font-bold ">1</div>
                                 <div>
-                                    <h3 className="text-xl font-semibold">Define Your Agent</h3>
-                                    <p className="mt-2 text-gray-600">
+                                    <h3 className="text-center text-xl font-semibold lg:text-start">Define Your Agent</h3>
+                                    <p className="text-center lg:text-start mt-2 text-gray-600">
                                         Create a new agent and give it a role, like &quot;You are a
                                         senior hiring manager at Google for a web developer role.&quot;
                                     </p>
                                 </div>
                             </div>
-                            <div className="flex flex-col items-center gap-6 md:flex-row">
-                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-900 text-white text-2xl font-bold">2</div>
+                            <div className="flex flex-col items-center gap-6 lg:flex-row">
+                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-900 text-white text-2xl font-bold ">2</div>
                                 <div>
-                                    <h3 className="text-xl font-semibold">Start the Meeting</h3>
-                                    <p className="mt-2 text-gray-600">
+                                    <h3 className="text-center lg:text-start text-xl font-semibold">Start the Meeting</h3>
+                                    <p className="text-center lg:text-start mt-2 text-gray-600">
                                         Schedule a new meeting, assign your custom agent, and join
                                         the live video call when you&apos;re ready to practice.
                                     </p>
                                 </div>
                             </div>
-                            <div className="flex flex-col items-center gap-6 md:flex-row">
-                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-900 text-white text-2xl font-bold">3</div>
+                            <div className="flex flex-col items-center gap-6 lg:flex-row">
+                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-900 text-white text-2xl font-bold ">3</div>
                                 <div>
-                                    <h3 className="text-xl font-semibold">Review & Analyze</h3>
-                                    <p className="mt-2 text-gray-600">
+                                    <h3 className="text-center lg:text-start text-xl font-semibold">Review & Analyze</h3>
+                                    <p className="text-center lg:text-start mt-2 text-gray-600">
                                         Instantly get your recording, transcript, and AI summary. Use
                                         the &quot;Ask AI&quot; chat to drill down on specific details.
                                     </p>
@@ -140,7 +140,7 @@ export const HomeView = () => {
                                 href="/agents"
                                 className={buttonVariants({ size: "lg", variant: "default" })}
                             >
-                                Start Prepping for Free
+                                Create Agents for Free
                             </Link>
                         </div>
                     </div>
