@@ -22,7 +22,7 @@ interface AgentIdViewProps {
 export const AgentIdView = ({ agentId }: AgentIdViewProps) => {
     const router = useRouter();
     const queryClient = useQueryClient();
-    const trpc = useTRPC();
+    const trpc = useTRPC()
 
     const [updateAgentDialogOpen, setUpdateAgentDialogOpen] = useState(false);
 

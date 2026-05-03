@@ -18,9 +18,11 @@ export const MeetingView = () => {
     const [filters, setFilters] = useMeetingsFilters();
 
     const trpc = useTRPC();
-    const { data } = useSuspenseQuery(trpc.meetings.getMany.queryOptions({
-        ...filters
-    }));
+    const { data } = useSuspenseQuery(
+        trpc.meetings.getMany.queryOptions({
+            ...filters
+        })
+    );
 
     if (data.items.length === 0) {
         return (

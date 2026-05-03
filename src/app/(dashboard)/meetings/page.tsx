@@ -14,7 +14,6 @@ interface Props {
     searchParams: Promise<SearchParams>
 }
 
-
 const Page = async ({ searchParams }: Props) => {
     const filters = await loadSearchParams(searchParams);
 
@@ -23,7 +22,7 @@ const Page = async ({ searchParams }: Props) => {
     });
 
     if (!session) {
-        redirect("/sign-in"); // server-side redirect
+        redirect("/sign-in");
     }
 
     const queryClient = getQueryClient();
